@@ -1,10 +1,22 @@
-﻿namespace Alura.Filmes.App
+﻿using Alura.Filmes.App.Dados;
+using Alura.Filmes.App.Extensions;
+using System;
+
+namespace Alura.Filmes.App
 {
     class Program
     {
         static void Main(string[] args)
         {
-            
+            using (var contexto = new AluraFilmesContexto())
+            {
+                contexto.LogSQLToConsole();
+                foreach (var atores in contexto.Atores)
+                {
+                    Console.WriteLine(atores);
+                }
+                Console.ReadKey();
+            }
         }
     }
 }
