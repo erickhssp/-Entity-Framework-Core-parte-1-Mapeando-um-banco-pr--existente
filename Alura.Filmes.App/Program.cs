@@ -14,19 +14,18 @@ namespace Alura.Filmes.App
             {
                 contexto.LogSQLToConsole();
 
-                var filme = contexto.Filmes
-                    .Include(f => f.Atores)
-                    .ThenInclude(fa => fa.Ator)
-                    .First();
-                    
+                var categorias = contexto.Categorias
+           .Include(c => c.Filmes)
+           .ThenInclude(fc => fc.Filme);
 
-
-                Console.WriteLine(filme);
-                Console.WriteLine("Elenco:");
-
-                foreach (var ator in filme.Atores)
+                foreach (var c in categorias)
                 {
-                    Console.WriteLine(ator.Ator);
+                    Console.WriteLine("");
+                    Console.WriteLine($"Filmes da categoria {c}:");
+                    foreach (var fc in c.Filmes)
+                    {
+                        Console.WriteLine(fc.Filme);
+                    }
                 }
                 Console.ReadKey();
             }
