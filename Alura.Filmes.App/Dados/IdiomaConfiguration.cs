@@ -1,16 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Alura.Filmes.App.Negocio;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
 namespace Alura.Filmes.App.Dados
 {
-    internal class IdiomaConfiguration : IEntityTypeConfiguration<Idioma>
+    public class IdiomaConfiguration : IEntityTypeConfiguration<Idioma>
     {
         public void Configure(EntityTypeBuilder<Idioma> builder)
         {
             builder.ToTable("language");
+
             builder.Property(i => i.Id)
-                .HasColumnName("language_id");
+                .HasColumnName("language_id")
+                .IsRequired();
 
             builder.Property(i => i.Nome)
                 .HasColumnName("name")
@@ -18,11 +21,8 @@ namespace Alura.Filmes.App.Dados
                 .IsRequired();
 
             builder.Property<DateTime>("last_update")
-                .HasColumnType("datetime")
-                .HasDefaultValueSql("getdate()");
-
-
-
+                .HasDefaultValueSql("getdate()")
+                .IsRequired();
         }
     }
 }

@@ -20,26 +20,6 @@ namespace Alura.Filmes.App.Migrations
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Alura.Filmes.App.Dados.Idioma", b =>
-                {
-                    b.Property<byte>("Id")
-                        .HasColumnName("language_id");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnName("name")
-                        .HasColumnType("char(20)");
-
-                    b.Property<DateTime>("last_update")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("language");
-                });
-
             modelBuilder.Entity("Alura.Filmes.App.Negocio.Ator", b =>
                 {
                     b.Property<int>("Id")
@@ -101,20 +81,25 @@ namespace Alura.Filmes.App.Migrations
                         .HasColumnType("text");
 
                     b.Property<short>("Duracao")
-                        .HasColumnName("length")
-                        .HasColumnType("short");
+                        .HasColumnName("length");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnName("title")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<byte>("language_id");
+
                     b.Property<DateTime>("last_update")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime");
+
+                    b.Property<byte?>("original_language_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("language_id");
+
+                    b.HasIndex("original_language_id");
 
                     b.ToTable("film");
                 });
@@ -148,6 +133,37 @@ namespace Alura.Filmes.App.Migrations
                     b.HasIndex("category_id");
 
                     b.ToTable("film_category");
+                });
+
+            modelBuilder.Entity("Alura.Filmes.App.Negocio.Idioma", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnName("language_id");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnName("name")
+                        .HasColumnType("char(20)");
+
+                    b.Property<DateTime>("last_update")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("language");
+                });
+
+            modelBuilder.Entity("Alura.Filmes.App.Negocio.Filme", b =>
+                {
+                    b.HasOne("Alura.Filmes.App.Negocio.Idioma", "IdiomaFalado")
+                        .WithMany("FilmesFalados")
+                        .HasForeignKey("language_id")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Alura.Filmes.App.Negocio.Idioma", "IdiomaOriginal")
+                        .WithMany("FilmesOriginais")
+                        .HasForeignKey("original_language_id");
                 });
 
             modelBuilder.Entity("Alura.Filmes.App.Negocio.FilmeAtor", b =>
